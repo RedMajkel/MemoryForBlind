@@ -1,7 +1,5 @@
 package pl.polsl.piechota.michal.memoryforblind.services;
 
-import android.content.Context;
-import android.view.View;
 import android.widget.TextView;
 
 import pl.polsl.piechota.michal.memoryforblind.enums.Directions;

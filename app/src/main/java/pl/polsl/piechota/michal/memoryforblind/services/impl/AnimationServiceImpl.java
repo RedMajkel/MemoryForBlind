@@ -6,7 +6,6 @@ import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.widget.TextView;
 
 import pl.polsl.piechota.michal.memoryforblind.enums.Directions;
@@ -57,7 +56,7 @@ public class AnimationServiceImpl implements AnimationService {
         swap = !swap;
     }
 
-    public void swipeLeft(View primary, View secondary) {
+    private void swipeLeft(View primary, View secondary) {
         secondary.setX(primary.getX()+size.x);
         secondary.setY(primary.getY());
 
@@ -72,7 +71,7 @@ public class AnimationServiceImpl implements AnimationService {
                 .setDuration(DURATION);
     }
 
-    public void swipeRight(View primary, View secondary) {
+    private void swipeRight(View primary, View secondary) {
         secondary.setX(primary.getX()-size.x);
         secondary.setY(primary.getY());
 
@@ -87,7 +86,7 @@ public class AnimationServiceImpl implements AnimationService {
                 .setDuration(DURATION);
     }
 
-    public void swipeUp(View primary, View secondary) {
+    private void swipeUp(View primary, View secondary) {
         secondary.setX(center.x - secondary.getMeasuredWidth()/2);
         secondary.setY(primary.getY()+size.y);
 

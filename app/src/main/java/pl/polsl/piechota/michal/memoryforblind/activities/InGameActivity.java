@@ -12,6 +12,7 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnTouch;
+import pl.polsl.piechota.michal.memoryforblind.Engine.Board;
 import pl.polsl.piechota.michal.memoryforblind.R;
 import pl.polsl.piechota.michal.memoryforblind.enums.Directions;
 import pl.polsl.piechota.michal.memoryforblind.listeners.GestureListener;
@@ -30,7 +31,7 @@ public class InGameActivity extends AppCompatActivity {
     private GestureDetector gestureDetector;
 
     private Point coordinates = new Point(0, 0);
-    private char[][] board;
+    private Board board;
 
     @InjectView(R.id.primary)
     TextView primary;
@@ -52,7 +53,7 @@ public class InGameActivity extends AppCompatActivity {
 
         board = inGameService.createBoard(WIDTH, HEIGHT);
 
-        primary.setText(String.valueOf(board[0][0]));
+        primary.setText(String.valueOf(board.getTile(0, 0).getValue()));
 
     }
 
@@ -71,7 +72,7 @@ public class InGameActivity extends AppCompatActivity {
                 if (coordinates.x + 1 < WIDTH && !animationService.isLocked()) {
                     coordinates.x += 1;
                     animationService.swipe(primary, secondary, Directions.LEFT,
-                            String.valueOf(board[coordinates.x][coordinates.y]));
+                            String.valueOf(board.getTile(coordinates).getValue()));
                 }
             }
 
@@ -80,7 +81,7 @@ public class InGameActivity extends AppCompatActivity {
                 if (coordinates.x -1 >= 0 && !animationService.isLocked()) {
                     coordinates.x -= 1;
                     animationService.swipe(primary, secondary, Directions.RIGHT,
-                            String.valueOf(board[coordinates.x][coordinates.y]));
+                            String.valueOf(board.getTile(coordinates).getValue()));
                 }
             }
 
@@ -89,7 +90,7 @@ public class InGameActivity extends AppCompatActivity {
                 if (coordinates.y + 1 < HEIGHT && !animationService.isLocked()) {
                     coordinates.y += 1;
                     animationService.swipe(primary, secondary, Directions.UP,
-                            String.valueOf(board[coordinates.x][coordinates.y]));
+                            String.valueOf(board.getTile(coordinates).getValue()));
                 }
             }
 
@@ -97,9 +98,8 @@ public class InGameActivity extends AppCompatActivity {
             public void onSwipeDown() {
                 if (coordinates.y - 1 >= 0 && !animationService.isLocked()) {
                     coordinates.y -= 1;
-                    primary.setText(String.valueOf(board[coordinates.x][coordinates.y]));
                     animationService.swipe(primary, secondary, Directions.DOWN,
-                            String.valueOf(board[coordinates.x][coordinates.y]));
+                            String.valueOf(board.getTile(coordinates).getValue()));
                 }
             }
         });
