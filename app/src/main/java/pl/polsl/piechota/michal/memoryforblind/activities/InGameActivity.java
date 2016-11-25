@@ -13,8 +13,10 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnTouch;
 import pl.polsl.piechota.michal.memoryforblind.Engine.Board;
+import pl.polsl.piechota.michal.memoryforblind.Engine.Tile;
 import pl.polsl.piechota.michal.memoryforblind.R;
 import pl.polsl.piechota.michal.memoryforblind.enums.Directions;
+import pl.polsl.piechota.michal.memoryforblind.enums.TileState;
 import pl.polsl.piechota.michal.memoryforblind.listeners.GestureListener;
 import pl.polsl.piechota.michal.memoryforblind.services.AnimationService;
 import pl.polsl.piechota.michal.memoryforblind.services.InGameService;
@@ -29,6 +31,7 @@ public class InGameActivity extends AppCompatActivity {
     private AnimationService animationService;
     private InGameService inGameService;
     private GestureDetector gestureDetector;
+    private Tile selected;
 
     private Point coordinates = new Point(0, 0);
     private Board board;
@@ -53,13 +56,14 @@ public class InGameActivity extends AppCompatActivity {
 
         board = inGameService.createBoard(WIDTH, HEIGHT);
 
-        primary.setText(String.valueOf(board.getTile(0, 0).getValue()));
+        primary.setText("?");
 
     }
 
     @OnTouch(R.id.activity_main)
     public boolean onTouch(View v, MotionEvent event) {
         if (animationService == null) {
+            //TODO - OKROPNE(!!!) rozwiązanie
             animationService = new AnimationServiceImpl(primary, getApplicationContext());
         }
         return gestureDetector.onTouchEvent(event);
@@ -72,7 +76,7 @@ public class InGameActivity extends AppCompatActivity {
                 if (coordinates.x + 1 < WIDTH && !animationService.isLocked()) {
                     coordinates.x += 1;
                     animationService.swipe(primary, secondary, Directions.LEFT,
-                            String.valueOf(board.getTile(coordinates).getValue()));
+                            board.getTile(coordinates));
                 }
             }
 
@@ -81,7 +85,7 @@ public class InGameActivity extends AppCompatActivity {
                 if (coordinates.x -1 >= 0 && !animationService.isLocked()) {
                     coordinates.x -= 1;
                     animationService.swipe(primary, secondary, Directions.RIGHT,
-                            String.valueOf(board.getTile(coordinates).getValue()));
+                            board.getTile(coordinates));
                 }
             }
 
@@ -90,7 +94,7 @@ public class InGameActivity extends AppCompatActivity {
                 if (coordinates.y + 1 < HEIGHT && !animationService.isLocked()) {
                     coordinates.y += 1;
                     animationService.swipe(primary, secondary, Directions.UP,
-                            String.valueOf(board.getTile(coordinates).getValue()));
+                            board.getTile(coordinates));
                 }
             }
 
@@ -99,8 +103,35 @@ public class InGameActivity extends AppCompatActivity {
                 if (coordinates.y - 1 >= 0 && !animationService.isLocked()) {
                     coordinates.y -= 1;
                     animationService.swipe(primary, secondary, Directions.DOWN,
-                            String.valueOf(board.getTile(coordinates).getValue()));
+                            board.getTile(coordinates));
                 }
+            }
+
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                if (TileState.COVERED.equals(board.getTile(coordinates).getState())) {
+                    if (selected == null) {
+                        animationService.flip(primary, secondary, board.getTile(coordinates),
+                                TileState.UNCOVERED);
+                        selected = board.getTile(coordinates);
+                    } else {
+                        if (!selected.equals(board.getTile(coordinates))) {
+                            animationService.flip(primary, secondary, board.getTile(coordinates),
+                                    TileState.UNCOVERED);
+                            Tile current = board.getTile(coordinates);
+                            if (selected.getValue() == current.getValue()) {
+                                animationService.flip(primary, secondary, selected, TileState.GUESSED);
+                                animationService.flip(primary, secondary, current, TileState.GUESSED);
+
+                            } else {
+                                selected.setState(TileState.COVERED);
+                                current.setState(TileState.COVERED);
+                            }
+                            selected = null;
+                        }
+                    }
+                }
+                return true;
             }
         });
     }

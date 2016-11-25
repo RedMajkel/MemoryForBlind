@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:textSize="500px"
+        android:textSize="1200px"
         android:text="1" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:textSize="500px"
+        android:textSize="1200px"
         android:text="2"
         android:layout_marginRight="161dp"
         android:layout_marginEnd="161dp"

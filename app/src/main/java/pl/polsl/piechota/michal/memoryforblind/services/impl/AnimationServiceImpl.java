@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import pl.polsl.piechota.michal.memoryforblind.Engine.Tile;
 import pl.polsl.piechota.michal.memoryforblind.enums.Directions;
+import pl.polsl.piechota.michal.memoryforblind.enums.TileState;
 import pl.polsl.piechota.michal.memoryforblind.services.AnimationService;
 
 /**
@@ -34,7 +36,7 @@ public class AnimationServiceImpl implements AnimationService {
         size = getSize(context);
     }
 
-    public void swipe (TextView primary, TextView secondary, Directions direction, String text){
+    public void swipe(TextView primary, TextView secondary, Directions direction, Tile tile) {
         if (swap){
             TextView tmp = primary;
             primary = secondary;
@@ -51,9 +53,30 @@ public class AnimationServiceImpl implements AnimationService {
             case RIGHT: swipeRight(primary, secondary); break;
         }
 
-        secondary.setText(text);
+        setTextOnView(secondary, tile);
 
         swap = !swap;
+    }
+
+    private void setTextOnView(TextView view, Tile tile) {
+        if (TileState.COVERED.equals(tile.getState())) {
+            view.setText("?");
+        } else if (tile.getState().equals(TileState.GUESSED)) {
+            view.setText("X");
+        } else {
+            view.setText(String.valueOf(tile.getValue()));
+        }
+    }
+
+    public void flip(TextView primary, TextView secondary, Tile tile, TileState state) {
+        TextView actualView;
+        if (swap) {
+            actualView = secondary;
+        } else {
+            actualView = primary;
+        }
+        tile.setState(state);
+        setTextOnView(actualView, tile);
     }
 
     private void swipeLeft(View primary, View secondary) {
