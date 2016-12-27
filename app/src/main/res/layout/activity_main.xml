@@ -19,7 +19,8 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:textSize="1200px"
-        android:text="1" />
+        android:text="1"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/secondary"
@@ -33,6 +34,7 @@
         android:layout_alignBaseline="@+id/primary"
         android:layout_alignBottom="@+id/primary"
         android:layout_toLeftOf="@+id/primary"
-        android:layout_toStartOf="@+id/primary" />
+        android:layout_toStartOf="@+id/primary"
+        android:textColor="#000000" />
 
 </RelativeLayout>
