@@ -20,8 +20,10 @@ import pl.polsl.piechota.michal.memoryforblind.enums.TileState;
 import pl.polsl.piechota.michal.memoryforblind.listeners.GestureListener;
 import pl.polsl.piechota.michal.memoryforblind.services.AnimationService;
 import pl.polsl.piechota.michal.memoryforblind.services.InGameService;
+import pl.polsl.piechota.michal.memoryforblind.services.TTSService;
 import pl.polsl.piechota.michal.memoryforblind.services.impl.AnimationServiceImpl;
 import pl.polsl.piechota.michal.memoryforblind.services.impl.InGameServiceImpl;
+import pl.polsl.piechota.michal.memoryforblind.services.impl.TTSServiceImpl;
 
 public class InGameActivity extends AppCompatActivity {
     /*TODO usunąć stałe*/
@@ -30,6 +32,8 @@ public class InGameActivity extends AppCompatActivity {
 
     private AnimationService animationService;
     private InGameService inGameService;
+    private TTSService ttsService;
+
     private GestureDetector gestureDetector;
     private Tile selected;
 
@@ -51,6 +55,7 @@ public class InGameActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
         inGameService = new InGameServiceImpl();
+        ttsService = new TTSServiceImpl(getApplicationContext());
 
         initializeGestureDetector();
 
@@ -77,6 +82,7 @@ public class InGameActivity extends AppCompatActivity {
                     coordinates.x += 1;
                     animationService.swipe(primary, secondary, Directions.LEFT,
                             board.getTile(coordinates));
+                    read();
                 }
             }
 
@@ -87,6 +93,7 @@ public class InGameActivity extends AppCompatActivity {
                     animationService.swipe(primary, secondary, Directions.RIGHT,
                             board.getTile(coordinates));
                 }
+                read();
             }
 
             @Override
@@ -96,6 +103,7 @@ public class InGameActivity extends AppCompatActivity {
                     animationService.swipe(primary, secondary, Directions.UP,
                             board.getTile(coordinates));
                 }
+                read();
             }
 
             @Override
@@ -105,6 +113,7 @@ public class InGameActivity extends AppCompatActivity {
                     animationService.swipe(primary, secondary, Directions.DOWN,
                             board.getTile(coordinates));
                 }
+                read();
             }
 
             @Override
@@ -114,18 +123,23 @@ public class InGameActivity extends AppCompatActivity {
                         animationService.flip(primary, secondary, board.getTile(coordinates),
                                 TileState.UNCOVERED);
                         selected = board.getTile(coordinates);
+                        ttsService.speak("Wartość karty to "
+                                +board.getTile(coordinates).getValue()+".");
                     } else {
                         if (!selected.equals(board.getTile(coordinates))) {
                             animationService.flip(primary, secondary, board.getTile(coordinates),
                                     TileState.UNCOVERED);
+                            ttsService.speak("Wartość karty to "
+                                    +board.getTile(coordinates).getValue()+".");
                             Tile current = board.getTile(coordinates);
                             if (selected.getValue() == current.getValue()) {
                                 animationService.flip(primary, secondary, selected, TileState.GUESSED);
                                 animationService.flip(primary, secondary, current, TileState.GUESSED);
-
+                                ttsService.speak("Para znaleziona.");
                             } else {
                                 selected.setState(TileState.COVERED);
                                 current.setState(TileState.COVERED);
+                                ttsService.speak("Błędne dopasowanie.");
                             }
                             selected = null;
                         }
@@ -134,5 +148,9 @@ public class InGameActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void read() {
+        ttsService.readTile(board.getTile(coordinates));
     }
 }

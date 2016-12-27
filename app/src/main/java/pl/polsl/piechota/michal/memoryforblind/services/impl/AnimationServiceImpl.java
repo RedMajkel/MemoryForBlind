@@ -62,7 +62,7 @@ public class AnimationServiceImpl implements AnimationService {
         if (TileState.COVERED.equals(tile.getState())) {
             view.setText("?");
         } else if (tile.getState().equals(TileState.GUESSED)) {
-            view.setText("X");
+            view.setText("#");
         } else {
             view.setText(String.valueOf(tile.getValue()));
         }
