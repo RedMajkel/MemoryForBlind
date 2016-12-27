@@ -204,6 +204,10 @@ public class InGameActivity extends AppCompatActivity {
                     animationService.flip(primary, secondary, selected, TileState.GUESSED);
                     animationService.flip(primary, secondary, board.getTile(coordinates), TileState.GUESSED);
                     ttsService.speak(getString(R.string.tts_pair_found));
+                    guessed++;
+                    if (guessed*2 == WIDTH*HEIGHT){
+                        ttsService.speak(getString(R.string.tts_you_have_won));
+                    }
                 } else {
                     selected.setState(TileState.COVERED);
                     board.getTile(coordinates).setState(TileState.COVERED);

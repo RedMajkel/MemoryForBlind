@@ -7,4 +7,5 @@
     <string name="tts_pair_found">Para odnaleziona</string>
     <string name="tts_pair_mismatch">Karty nie są identyczne</string>
     <string name="tts_end_of_board">Koniec planszy</string>
+    <string name="tts_you_have_won">Gratulacje, wygrałeś!</string>
 </resources>
