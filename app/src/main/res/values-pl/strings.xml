@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Gra Memory Dla Niewidomych</string>
+    <string name="tts_tile_covered">Karta jest zakryta</string>
+    <string name="tts_tile_uncovered">Karta jest odkryta, a jej wartość to %s</string>
+    <string name="tts_tile_guessed">Karta jest już odgadnięta</string>
+    <string name="tts_tiles_value_is">Wartość karty to %s</string>
+    <string name="tts_pair_found">Para odnaleziona</string>
+    <string name="tts_pair_mismatch">Karty nie są identyczne</string>
+    <string name="tts_end_of_board">Koniec planszy</string>
+</resources>

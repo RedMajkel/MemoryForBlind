@@ -4,6 +4,7 @@ import android.content.Context;
 import android.speech.tts.TextToSpeech;
 
 import pl.polsl.piechota.michal.memoryforblind.Engine.Tile;
+import pl.polsl.piechota.michal.memoryforblind.R;
 import pl.polsl.piechota.michal.memoryforblind.services.TTSService;
 
 /**
@@ -13,13 +14,11 @@ import pl.polsl.piechota.michal.memoryforblind.services.TTSService;
 @SuppressWarnings("deprecation")
 public class TTSServiceImpl implements TTSService, TextToSpeech.OnInitListener {
     private final TextToSpeech textToSpeech;
-
-    private final String TILE_STATE_WITH_VALUE = "Karta jest %s , a jej wartość to %s";
-    private final String TILE_STATE = "Karta jest %s";
-
+    private final Context c;
 
     public TTSServiceImpl(Context context) {
-        textToSpeech = new TextToSpeech(context, this);
+        c = context;
+        textToSpeech = new TextToSpeech(c, this);
     }
 
     @Override
@@ -31,20 +30,24 @@ public class TTSServiceImpl implements TTSService, TextToSpeech.OnInitListener {
     public void readTile(Tile tile) {
         switch (tile.getState()){
             case COVERED:
-                speak(String.format(TILE_STATE, "zakryta"));
+                speak(c.getString(R.string.tts_tile_covered));
                 break;
             case UNCOVERED:
-                speak(String.format(TILE_STATE_WITH_VALUE, "odkryta", tile.getValue()));
+                speak(String.format(c.getString(R.string.tts_tile_uncovered), tile.getValue()));
                 break;
             case GUESSED:
-                speak(String.format(TILE_STATE, "już odgadnięta"));
+                speak(c.getString(R.string.tts_tile_guessed));
                 break;
             default: break;
         }
     }
 
     @Override
-    public void onInit(int status) {
+    public boolean isSpeaking() {
+        return textToSpeech.isSpeaking();
+    }
 
+    @Override
+    public void onInit(int status) {
     }
 }

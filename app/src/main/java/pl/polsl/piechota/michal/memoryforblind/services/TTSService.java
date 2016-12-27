@@ -10,4 +10,6 @@ public interface TTSService {
     void speak(String text);
 
     void readTile(Tile tile);
+
+    boolean isSpeaking();
 }
