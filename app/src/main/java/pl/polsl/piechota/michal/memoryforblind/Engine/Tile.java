@@ -1,4 +1,4 @@
-package pl.polsl.piechota.michal.memoryforblind.Engine;
+package pl.polsl.piechota.michal.memoryforblind.engine;
 
 import pl.polsl.piechota.michal.memoryforblind.enums.TileState;
 

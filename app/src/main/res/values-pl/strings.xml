@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">Gra Memory Dla Niewidomych</string>
+    <string name="tts_hello">Witaj w grze Memory przystosowanej dla osób niewidomych! Przeciągnij w górę by rozpocząć nową grę,
+        przeciągnij w lewo by ustawić rozmiar planszy,
+        przeciągnij w prawo by wysłuchać instrukcji,
+        przeciągnij w dół by wyjść z gry</string>
+    <string name="tts_help">Instrukcja do gry: celem gry jest odnalezienie wszystkich par zakrytych kart na ekranie.
+        Do sterowania grą wykorzystuje się gesty przesuniecia by przesunąć się po planszy, oraz podwójnego stuknięcia by odsłonić
+        karte. Aby wyjść z gry należy potrząsnąć urządzeniem. Powodzenia!</string>
     <string name="tts_tile_covered">Karta jest zakryta</string>
     <string name="tts_tile_uncovered">Karta jest odkryta, a jej wartość to %s</string>
     <string name="tts_tile_guessed">Karta jest już odgadnięta</string>

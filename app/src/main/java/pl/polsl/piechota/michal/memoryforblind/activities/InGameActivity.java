@@ -26,11 +26,10 @@ import pl.polsl.piechota.michal.memoryforblind.services.TTSService;
 import pl.polsl.piechota.michal.memoryforblind.services.impl.AnimationServiceImpl;
 import pl.polsl.piechota.michal.memoryforblind.services.impl.InGameServiceImpl;
 
-public class InGameActivity extends AppCompatActivity {
-    /*TODO usunąć stałe*/
-    private final int WIDTH = 4;
-    private final int HEIGHT = 4;
+import static pl.polsl.piechota.michal.memoryforblind.engine.Const.HEIGHT;
+import static pl.polsl.piechota.michal.memoryforblind.engine.Const.WIDTH;
 
+public class InGameActivity extends AppCompatActivity {
     private int guessed = 0;
 
     private AnimationService animationService;
@@ -41,7 +40,7 @@ public class InGameActivity extends AppCompatActivity {
     private Vibrator vibrator;
 
     private Tile selected;
-    private Point coordinates = new Point(0, 0);
+    private Point coordinates;
     private Board board;
 
     @InjectView(R.id.primary)
@@ -53,24 +52,34 @@ public class InGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ttsService = new TTSService(getApplicationContext());
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        init();
+    }
+
+    private void init() {
+        initActivityParams();
+        initServices();
+        initGestureDetector();
+        initGame();
+    }
+
+    private void initGame() {
+        board = inGameService.createBoard(WIDTH, HEIGHT);
+        coordinates = new Point(0, 0);
+        primary.setText("?");
+        read();
+    }
+
+    private void initActivityParams() {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
         ButterKnife.inject(this);
+    }
 
+    private void initServices() {
+        ttsService = new TTSService(getApplicationContext());
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-
         inGameService = new InGameServiceImpl();
-
-
-        initializeGestureDetector();
-
-        board = inGameService.createBoard(WIDTH, HEIGHT);
-
-        primary.setText("?");
-        read();
-
     }
 
     @OnTouch(R.id.activity_main)
@@ -82,7 +91,7 @@ public class InGameActivity extends AppCompatActivity {
         return gestureDetector.onTouchEvent(event);
     }
 
-    public void initializeGestureDetector() {
+    public void initGestureDetector() {
         gestureDetector = new GestureDetector(getApplicationContext(), new GestureListener(){
             @Override
             public void onSwipeLeft() {
@@ -94,13 +103,17 @@ public class InGameActivity extends AppCompatActivity {
                         read();
                     }
                     else {
-                        vibrator.vibrate(250);
-                        ttsService.speak(getString(R.string.tts_end_of_board));
+                        endOfBoard();
                     }
                 }
                 else {
                     vibrator.vibrate(100);
                 }
+            }
+
+            private void endOfBoard() {
+                vibrator.vibrate(250);
+                ttsService.speak(getString(R.string.tts_end_of_board));
             }
 
             @Override
@@ -113,8 +126,7 @@ public class InGameActivity extends AppCompatActivity {
                         read();
                     }
                     else {
-                        vibrator.vibrate(250);
-                        ttsService.speak(getString(R.string.tts_end_of_board));
+                        endOfBoard();
                     }
                 }
                 else {
@@ -132,8 +144,7 @@ public class InGameActivity extends AppCompatActivity {
                         read();
                     }
                     else {
-                        vibrator.vibrate(250);
-                        ttsService.speak(getString(R.string.tts_end_of_board));
+                        endOfBoard();
                     }
                 }
                 else {
@@ -151,8 +162,7 @@ public class InGameActivity extends AppCompatActivity {
                         read();
                     }
                     else {
-                        vibrator.vibrate(250);
-                        ttsService.speak(getString(R.string.tts_end_of_board));
+                        endOfBoard();
                     }
                 }
                 else {

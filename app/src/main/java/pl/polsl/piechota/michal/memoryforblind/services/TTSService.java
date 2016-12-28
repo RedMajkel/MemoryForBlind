@@ -24,6 +24,11 @@ public class TTSService extends TextToSpeech {
         c = context;
     }
 
+    public TTSService(Context context, OnInitListener listener) {
+        super(context, listener);
+        c = context;
+    }
+
     public void speak(String text){
         speak(text, TextToSpeech.QUEUE_ADD, null);
     }
