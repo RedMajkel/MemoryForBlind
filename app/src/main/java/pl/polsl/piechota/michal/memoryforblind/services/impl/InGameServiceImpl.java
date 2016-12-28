@@ -4,7 +4,7 @@ import android.graphics.Point;
 
 import java.util.Random;
 
-import pl.polsl.piechota.michal.memoryforblind.Engine.Board;
+import pl.polsl.piechota.michal.memoryforblind.engine.Board;
 import pl.polsl.piechota.michal.memoryforblind.enums.TileState;
 import pl.polsl.piechota.michal.memoryforblind.services.InGameService;
 

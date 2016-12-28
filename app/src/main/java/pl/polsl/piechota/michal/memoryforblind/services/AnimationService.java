@@ -2,7 +2,7 @@ package pl.polsl.piechota.michal.memoryforblind.services;
 
 import android.widget.TextView;
 
-import pl.polsl.piechota.michal.memoryforblind.Engine.Tile;
+import pl.polsl.piechota.michal.memoryforblind.engine.Tile;
 import pl.polsl.piechota.michal.memoryforblind.enums.Directions;
 import pl.polsl.piechota.michal.memoryforblind.enums.TileState;
 

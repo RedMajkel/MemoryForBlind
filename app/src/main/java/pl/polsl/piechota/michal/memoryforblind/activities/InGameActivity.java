@@ -3,6 +3,7 @@ package pl.polsl.piechota.michal.memoryforblind.activities;
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
@@ -13,9 +14,9 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnTouch;
-import pl.polsl.piechota.michal.memoryforblind.Engine.Board;
-import pl.polsl.piechota.michal.memoryforblind.Engine.Tile;
 import pl.polsl.piechota.michal.memoryforblind.R;
+import pl.polsl.piechota.michal.memoryforblind.engine.Board;
+import pl.polsl.piechota.michal.memoryforblind.engine.Tile;
 import pl.polsl.piechota.michal.memoryforblind.enums.Directions;
 import pl.polsl.piechota.michal.memoryforblind.enums.TileState;
 import pl.polsl.piechota.michal.memoryforblind.listeners.GestureListener;
@@ -24,7 +25,6 @@ import pl.polsl.piechota.michal.memoryforblind.services.InGameService;
 import pl.polsl.piechota.michal.memoryforblind.services.TTSService;
 import pl.polsl.piechota.michal.memoryforblind.services.impl.AnimationServiceImpl;
 import pl.polsl.piechota.michal.memoryforblind.services.impl.InGameServiceImpl;
-import pl.polsl.piechota.michal.memoryforblind.services.impl.TTSServiceImpl;
 
 public class InGameActivity extends AppCompatActivity {
     /*TODO usunąć stałe*/
@@ -53,7 +53,7 @@ public class InGameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ttsService = new TTSServiceImpl(getApplicationContext());
+        ttsService = new TTSService(getApplicationContext());
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
@@ -77,7 +77,7 @@ public class InGameActivity extends AppCompatActivity {
     public boolean onTouch(View v, MotionEvent event) {
         if (animationService == null) {
             //TODO - OKROPNE(!!!) rozwiązanie
-            animationService = new AnimationServiceImpl(primary, getApplicationContext());
+            animationService = new AnimationServiceImpl(primary, secondary, getApplicationContext());
         }
         return gestureDetector.onTouchEvent(event);
     }
@@ -169,8 +169,7 @@ public class InGameActivity extends AppCompatActivity {
                     } else {
                         if (!selected.equals(board.getTile(coordinates))) {
                             flip();
-                            check();
-                            selected = null;
+                            checkWhenTTSIsDone();
                         }
                     }
                     return true;
@@ -198,6 +197,27 @@ public class InGameActivity extends AppCompatActivity {
                         board.getTile(coordinates).getValue()));
             }
 
+            public void checkWhenTTSIsDone() {
+
+                final Handler h = new Handler();
+
+                Runnable r = new Runnable() {
+                    private volatile boolean shutdown = false;
+
+                    public void run() {
+                        while (!shutdown) {
+                            if (!ttsService.isSpeaking()) {
+                                shutdown = true;
+                                check();
+                            }
+
+                            h.postDelayed(this, 1000);
+                        }
+                    }
+                };
+
+                h.postDelayed(r, 1000);
+            }
 
             private void check() {
                 if (selected.getValue() == board.getTile(coordinates).getValue()) {
@@ -210,13 +230,15 @@ public class InGameActivity extends AppCompatActivity {
                     }
                 } else {
                     selected.setState(TileState.COVERED);
+                    animationService.flip(primary, secondary, selected, TileState.COVERED);
                     board.getTile(coordinates).setState(TileState.COVERED);
                     ttsService.speak(getString(R.string.tts_pair_mismatch));
                 }
+                selected = null;
             }
-
         });
     }
+
 
     private void read() {
         ttsService.readTile(board.getTile(coordinates));

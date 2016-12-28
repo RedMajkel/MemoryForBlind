@@ -1,6 +1,6 @@
 package pl.polsl.piechota.michal.memoryforblind.services;
 
-import pl.polsl.piechota.michal.memoryforblind.Engine.Board;
+import pl.polsl.piechota.michal.memoryforblind.engine.Board;
 
 /**
  * Created by majke on 31.10.2016.

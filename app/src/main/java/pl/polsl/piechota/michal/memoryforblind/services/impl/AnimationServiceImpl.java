@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import pl.polsl.piechota.michal.memoryforblind.Engine.Tile;
+import pl.polsl.piechota.michal.memoryforblind.engine.Tile;
 import pl.polsl.piechota.michal.memoryforblind.enums.Directions;
 import pl.polsl.piechota.michal.memoryforblind.enums.TileState;
 import pl.polsl.piechota.michal.memoryforblind.services.AnimationService;
@@ -20,20 +20,23 @@ import pl.polsl.piechota.michal.memoryforblind.services.AnimationService;
 public class AnimationServiceImpl implements AnimationService {
     private final long DURATION = 500;
     private Point center;
-    private Point size;
+    private Point screenSize;
     private boolean swap = false;
     private boolean lock = false;
 
     private final LockListener lockListener = new LockListener();
     private final UnlockListener unlockListener = new UnlockListener();
 
-    public AnimationServiceImpl(View view, Context context) {
-        view.measure(0, 0);
+    public AnimationServiceImpl(View primary, View secondary, Context context) {
+        primary.measure(0, 0);
 
-        center = new Point((int)(view.getX()+view.getMeasuredWidth()/2),
-                (int)view.getY());
+        center = new Point((int) (primary.getX() + primary.getMeasuredWidth() / 2),
+                (int) primary.getY());
 
-        size = getSize(context);
+        primary.setX(center.x - primary.getMeasuredWidth() / 2);
+        secondary.setX(center.x - secondary.getMeasuredWidth() / 2);
+
+        screenSize = getSize(context);
     }
 
     public void swipe(TextView primary, TextView secondary, Directions direction, Tile tile) {
@@ -77,65 +80,66 @@ public class AnimationServiceImpl implements AnimationService {
         }
         tile.setState(state);
         setTextOnView(actualView, tile);
+        actualView.setX(center.x - actualView.getMeasuredWidth() / 2);
     }
 
     private void swipeLeft(View primary, View secondary) {
-        secondary.setX(primary.getX()+size.x);
+        secondary.setX(center.x - secondary.getMeasuredWidth() / 2 + screenSize.x);
         secondary.setY(primary.getY());
 
         primary.animate()
                 .setListener(lockListener)
-                .translationXBy(-(size.x))
+                .translationXBy(-(screenSize.x))
                 .setDuration(DURATION);
 
         secondary.animate()
                 .setListener(unlockListener)
-                .translationXBy(-(size.x))
+                .translationXBy(-(screenSize.x))
                 .setDuration(DURATION);
     }
 
     private void swipeRight(View primary, View secondary) {
-        secondary.setX(primary.getX()-size.x);
+        secondary.setX(center.x - secondary.getMeasuredWidth() / 2 - screenSize.x);
         secondary.setY(primary.getY());
 
         primary.animate()
                 .setListener(lockListener)
-                .translationXBy((size.x))
+                .translationXBy((screenSize.x))
                 .setDuration(DURATION);
 
         secondary.animate()
                 .setListener(unlockListener)
-                .translationXBy((size.x))
+                .translationXBy((screenSize.x))
                 .setDuration(DURATION);
     }
 
     private void swipeUp(View primary, View secondary) {
         secondary.setX(center.x - secondary.getMeasuredWidth()/2);
-        secondary.setY(primary.getY()+size.y);
+        secondary.setY(primary.getY() + screenSize.y);
 
         primary.animate()
                 .setListener(lockListener)
-                .translationYBy(-(size.y))
+                .translationYBy(-(screenSize.y))
                 .setDuration(DURATION);
 
         secondary.animate()
                 .setListener(unlockListener)
-                .translationYBy(-(size.y))
+                .translationYBy(-(screenSize.y))
                 .setDuration(DURATION);
     }
 
     private void swipeDown(View primary, View secondary) {
         secondary.setX(center.x - secondary.getMeasuredWidth()/2);
-        secondary.setY(primary.getY()-size.y);
+        secondary.setY(primary.getY() - screenSize.y);
 
         primary.animate()
                 .setListener(lockListener)
-                .translationYBy(size.y)
+                .translationYBy(screenSize.y)
                 .setDuration(DURATION);
 
         secondary.animate()
                 .setListener(unlockListener)
-                .translationYBy(size.y)
+                .translationYBy(screenSize.y)
                 .setDuration(DURATION);
     }
 
