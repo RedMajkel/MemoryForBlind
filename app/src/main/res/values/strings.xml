@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">Memory For Blind</string>
+    <string name="new_game">New Game</string>
+    <string name="exit">Exit</string>
+    <string name="help">Help</string>
+    <string name="settings">Settings</string>
     <string name="tts_hello">Welcome to Memory For Blind Game! Swipe up to start new game, swipe left to set board size,
         swipe right to listen to help, and swipe down if you wish to exit game</string>
     <string name="tts_help">Instructions for the game: the game is to find all pairs of cards face down on the screen.
         To control the game uses the offset gestures to move around the board, and double-tap to reveal
-        card. To exit the game, shake the device. Good luck!</string>
+        card. To return to main menu, shake the device. Good luck!</string>
     <string name="tts_counter">Tap the screen as many times as you want to have pairs in the game (not more than 18). Long tap to confirm.</string>
     <string name="tts_tile_covered">Tile is covered</string>
     <string name="tts_tile_uncovered">Tile is uncovered and its value is %s</string>
@@ -13,5 +17,5 @@
     <string name="tts_pair_found">Pair found</string>
     <string name="tts_pair_mismatch">Pair mismatch</string>
     <string name="tts_end_of_board">End of board</string>
-    <string name="tts_you_have_won">Congratulations, you won!</string>
+    <string name="tts_you_have_won">Congratulations, you have won!</string>
 </resources>
