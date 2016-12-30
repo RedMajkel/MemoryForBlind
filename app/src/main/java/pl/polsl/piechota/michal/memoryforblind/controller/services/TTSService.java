@@ -1,10 +1,10 @@
-package pl.polsl.piechota.michal.memoryforblind.services;
+package pl.polsl.piechota.michal.memoryforblind.controller.services;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 
 import pl.polsl.piechota.michal.memoryforblind.R;
-import pl.polsl.piechota.michal.memoryforblind.engine.Tile;
+import pl.polsl.piechota.michal.memoryforblind.model.TileModel;
 
 /**
  * Created by michalp on 2016-12-27.
@@ -33,7 +33,7 @@ public class TTSService extends TextToSpeech {
         speak(text, TextToSpeech.QUEUE_ADD, null);
     }
 
-    public void readTile(Tile tile) {
+    public void readTile(TileModel tile) {
         switch (tile.getState()){
             case COVERED:
                 speak(c.getString(R.string.tts_tile_covered));

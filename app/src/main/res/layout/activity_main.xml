@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:layout_marginLeft="-5000px"
     android:layout_marginRight="-5000px"
-    tools:context="pl.polsl.piechota.michal.memoryforblind.activities.InGameActivity"
+    tools:context="pl.polsl.piechota.michal.memoryforblind.controller.activities.InGameActivity"
     android:background="#000000">
 
 

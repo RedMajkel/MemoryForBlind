@@ -1,4 +1,4 @@
-package pl.polsl.piechota.michal.memoryforblind.engine;
+package pl.polsl.piechota.michal.memoryforblind.model.utils;
 
 /**
  * Created by michalp on 2016-12-28.

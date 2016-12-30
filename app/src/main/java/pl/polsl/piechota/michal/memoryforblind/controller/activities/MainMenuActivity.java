@@ -1,4 +1,4 @@
-package pl.polsl.piechota.michal.memoryforblind.activities;
+package pl.polsl.piechota.michal.memoryforblind.controller.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.OnTouch;
 import pl.polsl.piechota.michal.memoryforblind.R;
-import pl.polsl.piechota.michal.memoryforblind.listeners.GestureListener;
-import pl.polsl.piechota.michal.memoryforblind.services.TTSService;
+import pl.polsl.piechota.michal.memoryforblind.controller.listeners.GestureListener;
+import pl.polsl.piechota.michal.memoryforblind.controller.services.TTSService;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -73,7 +73,7 @@ public class MainMenuActivity extends AppCompatActivity {
             @Override
             public void onSwipeLeft() {
                 if (!ttsService.isSpeaking()) {
-                    startActivity(TapCounter.class);
+                    startActivity(TapCounterActivity.class);
                 }
             }
 

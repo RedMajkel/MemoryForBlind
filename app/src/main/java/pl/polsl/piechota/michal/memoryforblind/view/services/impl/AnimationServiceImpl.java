@@ -1,4 +1,4 @@
-package pl.polsl.piechota.michal.memoryforblind.services.impl;
+package pl.polsl.piechota.michal.memoryforblind.view.services.impl;
 
 import android.animation.Animator;
 import android.content.Context;
@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import pl.polsl.piechota.michal.memoryforblind.engine.Tile;
-import pl.polsl.piechota.michal.memoryforblind.enums.Directions;
-import pl.polsl.piechota.michal.memoryforblind.enums.TileState;
-import pl.polsl.piechota.michal.memoryforblind.services.AnimationService;
+import pl.polsl.piechota.michal.memoryforblind.model.TileModel;
+import pl.polsl.piechota.michal.memoryforblind.model.utils.DirectionsEnum;
+import pl.polsl.piechota.michal.memoryforblind.model.utils.TileStateEnum;
+import pl.polsl.piechota.michal.memoryforblind.view.services.AnimationService;
 
 /**
  * Created by majke on 31.10.2016.
@@ -39,7 +39,7 @@ public class AnimationServiceImpl implements AnimationService {
         screenSize = getSize(context);
     }
 
-    public void swipe(TextView primary, TextView secondary, Directions direction, Tile tile) {
+    public void swipe(TextView primary, TextView secondary, DirectionsEnum direction, TileModel tile) {
         if (swap){
             TextView tmp = primary;
             primary = secondary;
@@ -61,17 +61,17 @@ public class AnimationServiceImpl implements AnimationService {
         swap = !swap;
     }
 
-    private void setTextOnView(TextView view, Tile tile) {
-        if (TileState.COVERED.equals(tile.getState())) {
+    private void setTextOnView(TextView view, TileModel tile) {
+        if (TileStateEnum.COVERED.equals(tile.getState())) {
             view.setText("?");
-        } else if (tile.getState().equals(TileState.GUESSED)) {
+        } else if (tile.getState().equals(TileStateEnum.GUESSED)) {
             view.setText("#");
         } else {
             view.setText(String.valueOf(tile.getValue()));
         }
     }
 
-    public void flip(TextView primary, TextView secondary, Tile tile, TileState state) {
+    public void flip(TextView primary, TextView secondary, TileModel tile, TileStateEnum state) {
         TextView actualView;
         if (swap) {
             actualView = secondary;

@@ -10,15 +10,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainMenuActivity">
+        <activity android:name=".controller.activities.MainMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.InGameActivity" />
-        <activity android:name=".activities.TapCounter"></activity>
+        <activity android:name=".controller.activities.InGameActivity" />
+        <activity android:name=".controller.activities.TapCounterActivity"></activity>
     </application>
 
 </manifest>

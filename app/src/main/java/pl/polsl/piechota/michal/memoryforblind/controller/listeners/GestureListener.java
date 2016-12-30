@@ -1,4 +1,4 @@
-package pl.polsl.piechota.michal.memoryforblind.listeners;
+package pl.polsl.piechota.michal.memoryforblind.controller.listeners;
 
 import android.view.GestureDetector;
 import android.view.MotionEvent;
