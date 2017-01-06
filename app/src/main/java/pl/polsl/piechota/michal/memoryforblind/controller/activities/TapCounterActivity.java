@@ -1,4 +1,4 @@
-package pl.polsl.piechota.michal.memoryforblind.activities;
+package pl.polsl.piechota.michal.memoryforblind.controller.activities;
 
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -12,13 +12,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnTouch;
 import pl.polsl.piechota.michal.memoryforblind.R;
-import pl.polsl.piechota.michal.memoryforblind.listeners.GestureListener;
-import pl.polsl.piechota.michal.memoryforblind.services.TTSService;
+import pl.polsl.piechota.michal.memoryforblind.controller.listeners.GestureListener;
+import pl.polsl.piechota.michal.memoryforblind.controller.services.TTSService;
 
-import static pl.polsl.piechota.michal.memoryforblind.engine.Const.HEIGHT;
-import static pl.polsl.piechota.michal.memoryforblind.engine.Const.WIDTH;
+import static pl.polsl.piechota.michal.memoryforblind.model.utils.Const.HEIGHT;
+import static pl.polsl.piechota.michal.memoryforblind.model.utils.Const.WIDTH;
 
-public class TapCounter extends AppCompatActivity {
+public class TapCounterActivity extends AppCompatActivity {
 
     private int counter;
     private GestureDetector gestureDetector;

@@ -1,4 +1,4 @@
-package pl.polsl.piechota.michal.memoryforblind.activities;
+package pl.polsl.piechota.michal.memoryforblind.controller.activities;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Point;
@@ -15,19 +15,19 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnTouch;
 import pl.polsl.piechota.michal.memoryforblind.R;
-import pl.polsl.piechota.michal.memoryforblind.engine.Board;
-import pl.polsl.piechota.michal.memoryforblind.engine.Tile;
-import pl.polsl.piechota.michal.memoryforblind.enums.Directions;
-import pl.polsl.piechota.michal.memoryforblind.enums.TileState;
-import pl.polsl.piechota.michal.memoryforblind.listeners.GestureListener;
-import pl.polsl.piechota.michal.memoryforblind.services.AnimationService;
-import pl.polsl.piechota.michal.memoryforblind.services.InGameService;
-import pl.polsl.piechota.michal.memoryforblind.services.TTSService;
-import pl.polsl.piechota.michal.memoryforblind.services.impl.AnimationServiceImpl;
-import pl.polsl.piechota.michal.memoryforblind.services.impl.InGameServiceImpl;
+import pl.polsl.piechota.michal.memoryforblind.controller.listeners.GestureListener;
+import pl.polsl.piechota.michal.memoryforblind.controller.services.InGameService;
+import pl.polsl.piechota.michal.memoryforblind.controller.services.TTSService;
+import pl.polsl.piechota.michal.memoryforblind.controller.services.impl.InGameServiceImpl;
+import pl.polsl.piechota.michal.memoryforblind.model.BoardModel;
+import pl.polsl.piechota.michal.memoryforblind.model.TileModel;
+import pl.polsl.piechota.michal.memoryforblind.model.utils.DirectionsEnum;
+import pl.polsl.piechota.michal.memoryforblind.model.utils.TileStateEnum;
+import pl.polsl.piechota.michal.memoryforblind.view.services.AnimationService;
+import pl.polsl.piechota.michal.memoryforblind.view.services.impl.AnimationServiceImpl;
 
-import static pl.polsl.piechota.michal.memoryforblind.engine.Const.HEIGHT;
-import static pl.polsl.piechota.michal.memoryforblind.engine.Const.WIDTH;
+import static pl.polsl.piechota.michal.memoryforblind.model.utils.Const.HEIGHT;
+import static pl.polsl.piechota.michal.memoryforblind.model.utils.Const.WIDTH;
 
 public class InGameActivity extends AppCompatActivity {
     private int guessed = 0;
@@ -39,9 +39,9 @@ public class InGameActivity extends AppCompatActivity {
     private GestureDetector gestureDetector;
     private Vibrator vibrator;
 
-    private Tile selected;
+    private TileModel selected;
     private Point coordinates;
-    private Board board;
+    private BoardModel board;
 
     private long time;
 
@@ -106,7 +106,7 @@ public class InGameActivity extends AppCompatActivity {
                 if (canAnimate()) {
                     if (coordinates.x + 1 < WIDTH) {
                         coordinates.x += 1;
-                        animationService.swipe(primary, secondary, Directions.LEFT,
+                        animationService.swipe(primary, secondary, DirectionsEnum.LEFT,
                                 board.getTile(coordinates));
                         read();
                     }
@@ -129,7 +129,7 @@ public class InGameActivity extends AppCompatActivity {
                 if (canAnimate()) {
                     if (coordinates.x - 1 >= 0) {
                         coordinates.x -= 1;
-                        animationService.swipe(primary, secondary, Directions.RIGHT,
+                        animationService.swipe(primary, secondary, DirectionsEnum.RIGHT,
                                 board.getTile(coordinates));
                         read();
                     }
@@ -147,7 +147,7 @@ public class InGameActivity extends AppCompatActivity {
                 if (canAnimate()) {
                     if (coordinates.y + 1 < HEIGHT) {
                         coordinates.y += 1;
-                        animationService.swipe(primary, secondary, Directions.UP,
+                        animationService.swipe(primary, secondary, DirectionsEnum.UP,
                                 board.getTile(coordinates));
                         read();
                     }
@@ -165,7 +165,7 @@ public class InGameActivity extends AppCompatActivity {
                 if (canAnimate()) {
                     if (coordinates.y - 1 >= 0) {
                         coordinates.y -= 1;
-                        animationService.swipe(primary, secondary, Directions.DOWN,
+                        animationService.swipe(primary, secondary, DirectionsEnum.DOWN,
                                 board.getTile(coordinates));
                         read();
                     }
@@ -180,7 +180,7 @@ public class InGameActivity extends AppCompatActivity {
 
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                if (canAnimate() && TileState.COVERED.equals(board.getTile(coordinates).getState())) {
+                if (canAnimate() && TileStateEnum.COVERED.equals(board.getTile(coordinates).getState())) {
                     if (selected == null) {
                         flip();
                         selected = board.getTile(coordinates);
@@ -237,8 +237,8 @@ public class InGameActivity extends AppCompatActivity {
 
             private void check() {
                 if (selected.getValue() == board.getTile(coordinates).getValue()) {
-                    animationService.flip(primary, secondary, selected, TileState.GUESSED);
-                    animationService.flip(primary, secondary, board.getTile(coordinates), TileState.GUESSED);
+                    animationService.flip(primary, secondary, selected, TileStateEnum.GUESSED);
+                    animationService.flip(primary, secondary, board.getTile(coordinates), TileStateEnum.GUESSED);
                     ttsService.speak(getString(R.string.tts_pair_found));
                     guessed++;
                     if (guessed*2 == WIDTH*HEIGHT){
@@ -248,9 +248,9 @@ public class InGameActivity extends AppCompatActivity {
                         finish();
                     }
                 } else {
-                    selected.setState(TileState.COVERED);
-                    animationService.flip(primary, secondary, selected, TileState.COVERED);
-                    board.getTile(coordinates).setState(TileState.COVERED);
+                    selected.setState(TileStateEnum.COVERED);
+                    animationService.flip(primary, secondary, selected, TileStateEnum.COVERED);
+                    board.getTile(coordinates).setState(TileStateEnum.COVERED);
                     ttsService.speak(getString(R.string.tts_pair_mismatch));
                 }
                 selected = null;
