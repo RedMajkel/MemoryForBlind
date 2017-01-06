@@ -66,8 +66,15 @@ public class TapCounter extends AppCompatActivity {
             }
 
             @Override
-            public void onLongPress(MotionEvent e) {
+            public boolean onDoubleTap(MotionEvent e) {
                 calculateBoard(counter);
+                finish();
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                ttsService.stop();
                 finish();
             }
         });

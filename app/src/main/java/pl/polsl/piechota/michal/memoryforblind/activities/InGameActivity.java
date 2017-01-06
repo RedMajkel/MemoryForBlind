@@ -43,6 +43,8 @@ public class InGameActivity extends AppCompatActivity {
     private Point coordinates;
     private Board board;
 
+    private long time;
+
     @InjectView(R.id.primary)
     TextView primary;
 
@@ -55,11 +57,16 @@ public class InGameActivity extends AppCompatActivity {
         init();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initGame();
+    }
+
     private void init() {
         initActivityParams();
         initServices();
         initGestureDetector();
-        initGame();
     }
 
     private void initGame() {
@@ -67,6 +74,7 @@ public class InGameActivity extends AppCompatActivity {
         coordinates = new Point(0, 0);
         primary.setText("?");
         read();
+        time = System.nanoTime();
     }
 
     private void initActivityParams() {
@@ -191,9 +199,8 @@ public class InGameActivity extends AppCompatActivity {
 
             @Override
             public void onLongPress(MotionEvent e){
-                if (!ttsService.isSpeaking()) {
-                    read();
-                }
+                ttsService.stop();
+                finish();
             }
 
             private boolean canAnimate() {
@@ -203,8 +210,7 @@ public class InGameActivity extends AppCompatActivity {
             private void flip() {
                 animationService.flip(primary, secondary, board.getTile(coordinates),
                         TileState.UNCOVERED);
-                ttsService.speak(String.format(getString(R.string.tts_tiles_value_is),
-                        board.getTile(coordinates).getValue()));
+                ttsService.speak(String.valueOf(board.getTile(coordinates).getValue()));
             }
 
             public void checkWhenTTSIsDone() {
@@ -236,7 +242,10 @@ public class InGameActivity extends AppCompatActivity {
                     ttsService.speak(getString(R.string.tts_pair_found));
                     guessed++;
                     if (guessed*2 == WIDTH*HEIGHT){
-                        ttsService.speak(getString(R.string.tts_you_have_won));
+                        ttsService.speak(
+                                String.format(getString(R.string.tts_you_have_won),
+                                        (System.nanoTime() - time) / 1000000000));
+                        finish();
                     }
                 } else {
                     selected.setState(TileState.COVERED);

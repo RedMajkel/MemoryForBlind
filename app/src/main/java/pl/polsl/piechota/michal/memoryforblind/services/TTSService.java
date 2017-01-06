@@ -39,10 +39,10 @@ public class TTSService extends TextToSpeech {
                 speak(c.getString(R.string.tts_tile_covered));
                 break;
             case UNCOVERED:
-                speak(String.format(c.getString(R.string.tts_tile_uncovered), tile.getValue()));
+                speak(String.valueOf(tile.getValue()));
                 break;
             case GUESSED:
-                speak(c.getString(R.string.tts_tile_guessed));
+                speak(tile.getValue() + c.getString(R.string.tts_tile_guessed));
                 break;
             default: break;
         }

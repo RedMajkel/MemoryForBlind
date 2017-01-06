@@ -58,7 +58,7 @@ public class MainMenuActivity extends AppCompatActivity {
             int counter;
 
             @Override
-            public void onSwipeDown() {
+            public void onLongPress(MotionEvent e) {
                 ttsService.shutdown();
                 System.exit(1);
             }
