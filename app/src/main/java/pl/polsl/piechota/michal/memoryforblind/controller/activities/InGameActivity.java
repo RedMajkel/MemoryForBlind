@@ -209,7 +209,7 @@ public class InGameActivity extends AppCompatActivity {
 
             private void flip() {
                 animationService.flip(primary, secondary, board.getTile(coordinates),
-                        TileState.UNCOVERED);
+                        TileStateEnum.UNCOVERED);
                 ttsService.speak(String.valueOf(board.getTile(coordinates).getValue()));
             }
 
