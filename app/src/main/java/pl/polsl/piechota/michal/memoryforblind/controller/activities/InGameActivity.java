@@ -19,7 +19,6 @@ import pl.polsl.piechota.michal.memoryforblind.R;
 import pl.polsl.piechota.michal.memoryforblind.controller.listeners.GestureListener;
 import pl.polsl.piechota.michal.memoryforblind.controller.services.InGameService;
 import pl.polsl.piechota.michal.memoryforblind.controller.services.TTSService;
-import pl.polsl.piechota.michal.memoryforblind.controller.services.impl.InGameServiceImpl;
 import pl.polsl.piechota.michal.memoryforblind.model.BoardModel;
 import pl.polsl.piechota.michal.memoryforblind.model.TileModel;
 import pl.polsl.piechota.michal.memoryforblind.model.utils.DirectionsEnum;
@@ -74,7 +73,6 @@ public class InGameActivity extends AppCompatActivity {
         board = inGameService.createBoard(WIDTH, HEIGHT);
         coordinates = new Point(0, 0);
         primary.setText("?");
-        readCurrentTile();
         time = System.nanoTime();
     }
 
@@ -93,7 +91,7 @@ public class InGameActivity extends AppCompatActivity {
             }
         });
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        inGameService = new InGameServiceImpl();
+        inGameService = InGameService.getInstance();
     }
 
     @OnTouch(R.id.activity_main)
@@ -218,7 +216,7 @@ public class InGameActivity extends AppCompatActivity {
                 ttsService.speak(String.valueOf(board.getTile(coordinates).getValue()));
             }
 
-            public void checkWhenTTSIsDone() {
+            private void checkWhenTTSIsDone() {
 
                 final Handler h = new Handler();
 

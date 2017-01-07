@@ -13,16 +13,15 @@ import butterknife.InjectView;
 import butterknife.OnTouch;
 import pl.polsl.piechota.michal.memoryforblind.R;
 import pl.polsl.piechota.michal.memoryforblind.controller.listeners.GestureListener;
+import pl.polsl.piechota.michal.memoryforblind.controller.services.InGameService;
 import pl.polsl.piechota.michal.memoryforblind.controller.services.TTSService;
-
-import static pl.polsl.piechota.michal.memoryforblind.model.utils.Const.HEIGHT;
-import static pl.polsl.piechota.michal.memoryforblind.model.utils.Const.WIDTH;
 
 public class TapCounterActivity extends AppCompatActivity {
 
     private int counter;
     private GestureDetector gestureDetector;
     private TTSService ttsService;
+    private InGameService inGameService;
 
     @InjectView(R.id.counter)
     TextView counterView;
@@ -36,6 +35,7 @@ public class TapCounterActivity extends AppCompatActivity {
         initTTSService();
         counter = 0;
         counterView.setText(String.valueOf(counter));
+        inGameService = InGameService.getInstance();
     }
 
     @OnTouch(R.id.activity_tap_counter)
@@ -67,7 +67,7 @@ public class TapCounterActivity extends AppCompatActivity {
 
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                calculateBoard(counter);
+                inGameService.calculateBoard(counter);
                 finish();
                 return true;
             }
@@ -78,29 +78,5 @@ public class TapCounterActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void calculateBoard(int pairs) {
-        int tiles = pairs * 2;
-        int prevWidth = pairs;
-        int prevHeight = 2;
-        int width = prevWidth;
-        int heigth = prevHeight;
-        int w, h;
-        for (int i = 3; i <= pairs; i++) {
-            if (tiles % i == 0) {
-                h = i;
-                w = tiles / i;
-                if ((h == prevWidth && w == prevHeight) || h * w == tiles) {
-                    width = prevWidth;
-                    heigth = prevHeight;
-                }
-                prevHeight = h;
-                prevWidth = w;
-            }
-        }
-
-        WIDTH = width;
-        HEIGHT = heigth;
     }
 }
