@@ -14,16 +14,6 @@ import pl.polsl.piechota.michal.memoryforblind.model.TileModel;
 public class TTSService extends TextToSpeech {
     private final Context c;
 
-    public TTSService(Context context) {
-        super(context, new OnInitListener() {
-            @Override
-            public void onInit(int status) {
-
-            }
-        });
-        c = context;
-    }
-
     public TTSService(Context context, OnInitListener listener) {
         super(context, listener);
         c = context;

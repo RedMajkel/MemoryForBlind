@@ -5,6 +5,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -73,7 +74,7 @@ public class InGameActivity extends AppCompatActivity {
         board = inGameService.createBoard(WIDTH, HEIGHT);
         coordinates = new Point(0, 0);
         primary.setText("?");
-        read();
+        readCurrentTile();
         time = System.nanoTime();
     }
 
@@ -85,7 +86,12 @@ public class InGameActivity extends AppCompatActivity {
     }
 
     private void initServices() {
-        ttsService = new TTSService(getApplicationContext());
+        ttsService = new TTSService(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                readCurrentTile();
+            }
+        });
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         inGameService = new InGameServiceImpl();
     }
@@ -93,7 +99,6 @@ public class InGameActivity extends AppCompatActivity {
     @OnTouch(R.id.activity_main)
     public boolean onTouch(View v, MotionEvent event) {
         if (animationService == null) {
-            //TODO - OKROPNE(!!!) rozwiązanie
             animationService = new AnimationServiceImpl(primary, secondary, getApplicationContext());
         }
         return gestureDetector.onTouchEvent(event);
@@ -108,7 +113,7 @@ public class InGameActivity extends AppCompatActivity {
                         coordinates.x += 1;
                         animationService.swipe(primary, secondary, DirectionsEnum.LEFT,
                                 board.getTile(coordinates));
-                        read();
+                        readCurrentTile();
                     }
                     else {
                         endOfBoard();
@@ -131,7 +136,7 @@ public class InGameActivity extends AppCompatActivity {
                         coordinates.x -= 1;
                         animationService.swipe(primary, secondary, DirectionsEnum.RIGHT,
                                 board.getTile(coordinates));
-                        read();
+                        readCurrentTile();
                     }
                     else {
                         endOfBoard();
@@ -149,7 +154,7 @@ public class InGameActivity extends AppCompatActivity {
                         coordinates.y += 1;
                         animationService.swipe(primary, secondary, DirectionsEnum.UP,
                                 board.getTile(coordinates));
-                        read();
+                        readCurrentTile();
                     }
                     else {
                         endOfBoard();
@@ -167,7 +172,7 @@ public class InGameActivity extends AppCompatActivity {
                         coordinates.y -= 1;
                         animationService.swipe(primary, secondary, DirectionsEnum.DOWN,
                                 board.getTile(coordinates));
-                        read();
+                        readCurrentTile();
                     }
                     else {
                         endOfBoard();
@@ -259,7 +264,7 @@ public class InGameActivity extends AppCompatActivity {
     }
 
 
-    private void read() {
+    private void readCurrentTile() {
         ttsService.readTile(board.getTile(coordinates));
     }
 }
