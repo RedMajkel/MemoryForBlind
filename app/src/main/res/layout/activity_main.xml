@@ -11,7 +11,9 @@
     android:layout_marginLeft="-5000px"
     android:layout_marginRight="-5000px"
     tools:context="pl.polsl.piechota.michal.memoryforblind.controller.activities.InGameActivity"
-    android:background="#000000">
+    android:background="#000000"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true">
 
 
     <TextView

@@ -81,6 +81,9 @@ public class InGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.inject(this);
+
+        primary.measure(0, 0);
+        primary.setY(primary.getY() - primary.getMeasuredHeight() * 0.15f);
     }
 
     private void initServices() {
