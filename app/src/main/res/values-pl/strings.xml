@@ -3,7 +3,7 @@
     <string name="new_game">Nowa Gra</string>
     <string name="exit">Wyjście</string>
     <string name="help">Pomoc</string>
-    <string name="settings">Ustawienia</string>
+    <string name="settings">Ustaw</string>
     <string name="tts_hello">Witaj w grze Memory przystosowanej dla osób niewidomych! Przeciągnij w górę by rozpocząć nową grę.
         przeciągnij w lewo by ustawić rozmiar planszy.
         przeciągnij w prawo by wysłuchać instrukcji.
